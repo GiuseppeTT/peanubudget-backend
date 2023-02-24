@@ -11,6 +11,9 @@
 		},
 		"ghcr.io/devcontainers/features/terraform:1": {}
 	},
+	"overrideFeatureInstallOrder": [
+		"ghcr.io/devcontainers/features/python"
+	],
 	"customizations": {
 		"vscode": {
 			"extensions": [
