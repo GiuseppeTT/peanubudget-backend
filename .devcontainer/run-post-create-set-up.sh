@@ -4,4 +4,4 @@
 terraform init
 
 # Install python dependencies
-#poetry install --no-root
+poetry install --no-root

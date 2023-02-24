@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "peanubudget-backend"
+version = "0.1.0"
+description = "Backend for the peanubudget project"
+authors = ["Giuseppe Tinti Tomio <fake@email.com>"]
+readme = "README.md"
+packages = [{include = "app"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
