@@ -6,6 +6,7 @@ metadata:
     app: {{ .Values.app }}
 spec:
   type: LoadBalancer
+  loadBalancerIP: {{ required "loadBalancer.ip is required" .Values.loadBalancer.ip }}
   ports:
   - port: {{ .Values.port }}
   selector:
