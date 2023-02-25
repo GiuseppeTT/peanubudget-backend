@@ -19,7 +19,8 @@
 			"extensions": [
 				"bungcip.better-toml",
 				"GitHub.copilot",
-				"hashicorp.terraform"
+				"hashicorp.terraform",
+				"ms-kubernetes-tools.vscode-kubernetes-tools"
 			]
 		}
 	},
