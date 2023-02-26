@@ -47,8 +47,14 @@ jobs:
 
       - name: Build and push docker image
         run: |
-          docker build -t ${{ env.CONTAINER_REGISTRY_FQDN }}/${{ env.IMAGE_NAME }}:${{ github.sha }} -t ${{ env.CONTAINER_REGISTRY_FQDN }}/${{ env.IMAGE_NAME }}:latest .
-          docker push ${{ env.CONTAINER_REGISTRY_FQDN }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker build \
+            -t ${{ env.CONTAINER_REGISTRY_FQDN }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            -t ${{ env.CONTAINER_REGISTRY_FQDN }}/${{ env.IMAGE_NAME }}:latest \
+            .
+
+          docker push \
+            ${{ env.CONTAINER_REGISTRY_FQDN }}/${{ env.IMAGE_NAME }} \
+            --all-tags
 
   deploy:
     runs-on: ubuntu-latest
@@ -98,15 +104,15 @@ jobs:
       - name: Deploy chart to AKS
         run: |
           helm upgrade \
-              peanubudget \
-              ./kubernetes \
-              --install \
-              --atomic \
-              --wait \
-              --set image.repository=${{ env.CONTAINER_REGISTRY_FQDN }} \
-              --set image.name=${{ env.IMAGE_NAME }} \
-              --set image.tag=${{ github.sha }} \
-              --set database.username=${{ env.DATABASE_USERNAME }} \
-              --set database.password=${{ env.DATABASE_PASSWORD }} \
-              --set database.fqdn=${{ env.DATABASE_FQDN }} \
-              --set loadBalancer.ip=${{ env.KUBERNETES_IP }}
+            peanubudget \
+            ./kubernetes \
+            --install \
+            --atomic \
+            --wait \
+            --set image.repository=${{ env.CONTAINER_REGISTRY_FQDN }} \
+            --set image.name=${{ env.IMAGE_NAME }} \
+            --set image.tag=${{ github.sha }} \
+            --set database.username=${{ env.DATABASE_USERNAME }} \
+            --set database.password=${{ env.DATABASE_PASSWORD }} \
+            --set database.fqdn=${{ env.DATABASE_FQDN }} \
+            --set loadBalancer.ip=${{ env.KUBERNETES_IP }}
