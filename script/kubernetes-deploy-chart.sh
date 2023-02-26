@@ -4,10 +4,11 @@ helm upgrade \
     peanubudget \
     ./kubernetes \
     --install \
-    --create-namespace \
     --atomic \
     --wait \
-    --namespace staging \
+    --set image.repository=${CONTAINER_REGISTRY_FQDN} \
+    --set image.name=${IMAGE_NAME} \
+    --set image.tag=latest \
     --set database.username=${DATABASE_USERNAME} \
     --set database.password=${DATABASE_PASSWORD} \
     --set database.fqdn=${DATABASE_FQDN} \

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: {{ .Values.prefix }}-container
-        image: {{ .Values.image }}
+        image: {{ required "image.repository is required" .Values.image.repository }}/{{ required "image.name is required" .Values.image.name }}:{{ required "image.tag is required" .Values.image.tag }}
         ports:
         - containerPort: {{ .Values.port }}
         envFrom:
