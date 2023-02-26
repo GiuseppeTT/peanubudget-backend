@@ -49,3 +49,63 @@ jobs:
         run: |
           docker build -t ${{ env.CONTAINER_REGISTRY_FQDN }}/${{ env.IMAGE_NAME }}:${{ github.sha }} -t ${{ env.CONTAINER_REGISTRY_FQDN }}/${{ env.IMAGE_NAME }}:latest .
           docker push ${{ env.CONTAINER_REGISTRY_FQDN }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_hostname: app.terraform.io
+          cli_config_credentials_token: ${{ secrets.TF_TOKEN }}
+          terraform_version: ">= 1.3"
+          terraform_wrapper: false
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Set container registry environment variables
+        run: |
+          echo "RESOURCE_GROUP_NAME=$(terraform output -raw resource_group_name)" >> $GITHUB_ENV
+          echo "KUBERNETES_NAME=$(terraform output -raw kubernetes_name)" >> $GITHUB_ENV
+
+          echo "CONTAINER_REGISTRY_FQDN=$(terraform output -raw container_registry_fqdn)" >> $GITHUB_ENV
+          echo "IMAGE_NAME=$(terraform output -raw image_name)" >> $GITHUB_ENV
+          echo "DATABASE_USERNAME=$(terraform output -raw database_username)" >> $GITHUB_ENV
+          echo "DATABASE_PASSWORD=$(terraform output -raw database_password)" >> $GITHUB_ENV
+          echo "DATABASE_FQDN=$(terraform output -raw database_fqdn)" >> $GITHUB_ENV
+          echo "KUBERNETES_IP=$(terraform output -raw kubernetes_ip)" >> $GITHUB_ENV
+
+      - uses: azure/setup-helm@v3
+        with:
+          version: v3.11.1
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set AKS context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ env.RESOURCE_GROUP_NAME }}
+          cluster-name: ${{ env.KUBERNETES_NAME }}
+
+      - name: Deploy chart to AKS
+        run: |
+          helm upgrade \
+              peanubudget \
+              ./kubernetes \
+              --install \
+              --atomic \
+              --wait \
+              --set image.repository=${{ env.CONTAINER_REGISTRY_FQDN }} \
+              --set image.name=${{ env.IMAGE_NAME }} \
+              --set image.tag=${{ github.sha }} \
+              --set database.username=${{ env.DATABASE_USERNAME }} \
+              --set database.password=${{ env.DATABASE_PASSWORD }} \
+              --set database.fqdn=${{ env.DATABASE_FQDN }} \
+              --set loadBalancer.ip=${{ env.KUBERNETES_IP }}
