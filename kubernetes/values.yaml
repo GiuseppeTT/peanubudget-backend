@@ -1,0 +1,4 @@
+prefix: peanubudget
+app: peanubudget
+port: 80
+replicaCount: 3

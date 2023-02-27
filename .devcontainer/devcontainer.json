@@ -1,0 +1,36 @@
+{
+	"name": "peanubudget-backend",
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+	"features": {
+		"ghcr.io/devcontainers-contrib/features/poetry:2": {},
+		"ghcr.io/devcontainers/features/azure-cli:1": {},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+		"ghcr.io/devcontainers/features/python:1": {
+			"version": "3.11"
+		},
+		"ghcr.io/devcontainers/features/terraform:1": {}
+	},
+	"overrideFeatureInstallOrder": [
+		"ghcr.io/devcontainers/features/python"
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"bungcip.better-toml",
+				"GitHub.copilot",
+				"hashicorp.terraform",
+				"ms-kubernetes-tools.vscode-kubernetes-tools"
+			]
+		}
+	},
+
+	// Load environment variables
+	"runArgs": ["--env-file", ".env"],
+
+	// Set up devcontainer after container is created
+	"postCreateCommand": ". .devcontainer/run-post-create-set-up.sh"
+
+	// Uncomment and rebuild to connect as root
+	// "remoteUser": "root"
+}

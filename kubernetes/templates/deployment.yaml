@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.prefix }}-deployment
+  labels:
+    app: {{ .Values.app }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app }}
+    spec:
+      containers:
+      - name: {{ .Values.prefix }}-container
+        image: {{ required "image.repository is required" .Values.image.repository }}/{{ required "image.name is required" .Values.image.name }}:{{ required "image.tag is required" .Values.image.tag }}
+        ports:
+        - containerPort: {{ .Values.port }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.prefix }}-secret
