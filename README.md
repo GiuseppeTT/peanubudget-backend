@@ -8,13 +8,13 @@ You can find more information about the PeanuBudget project at the [index reposi
 
 ## I'm completely lost, where should I start?
 
-If you want to **understand the backend**, check the `app/` folder, starting by the `app/main.py` file.
+If you want to **understand the backend**, check the `app/` folder, starting with the `app/main.py` file.
 
 If you want to **understand the containerization**, check the `Dockerfile` file and the `kubernetes/` folder.
 
 If you want to **understand the big picture**, check the [index repository](https://github.com/GiuseppeTT/peanubudget).
 
-If you are new to FastAPI, the [User Guide](https://fastapi.tiangolo.com/tutorial/) tutorial from FastAPI's documentation is a great place to start. Additionally, you can check the [User Guide](https://sqlmodel.tiangolo.com/tutorial/) tutorial from the SQLModel's documentation and even the [Basic Usage](https://python-poetry.org/docs/basic-usage/) tutorial from Poetry's documentation.
+If you are new to FastAPI, the [User Guide](https://fastapi.tiangolo.com/tutorial/) tutorial from FastAPI's documentation is a great place to start. Additionally, you can check the [User Guide](https://sqlmodel.tiangolo.com/tutorial/) tutorial from SQLModel's documentation and even the [Basic Usage](https://python-poetry.org/docs/basic-usage/) tutorial from Poetry's documentation.
 
 ## How to ...
 
