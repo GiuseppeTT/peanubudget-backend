@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 from app.database import create_database_and_tables
 from app.router import account, category, payee, transaction
 
 app = FastAPI()
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,6 +19,11 @@ app.add_middleware(
 @app.on_event("startup")
 def on_startup():
     create_database_and_tables()
+
+
+@app.get("/")
+def redirect_docs():
+    return RedirectResponse(url="/docs")
 
 
 app.include_router(account.router)
