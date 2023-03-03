@@ -21,9 +21,9 @@ def on_startup():
     create_database_and_tables()
 
 
-@app.get("/")
+@app.get("/", response_class=RedirectResponse)
 def redirect_docs():
-    return RedirectResponse(url="/docs")
+    return "/docs"
 
 
 app.include_router(account.router)
